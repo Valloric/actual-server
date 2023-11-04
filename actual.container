@@ -1,0 +1,25 @@
+# Requires Podman 4.4+
+#
+# Full documentation at
+#   https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html
+[Unit]
+Description=The Actual container
+# Should not start before the local filesystem is ready
+After=local-fs.target
+
+[Container]
+Image=ghcr.io/actualbudget/actual-server:latest
+# Actual web interface will be available at http://localhost:5006
+PublishPort=5006
+# Actual will store data in the `actual-data` folder next to the location
+# of the current file. Feel free to change the part before the ":".
+Volume=./actual-data:/data
+
+[Service]
+# Restart on any crash, see
+#   https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+Restart=always
+
+[Install]
+# Start by default on boot
+WantedBy=multi-user.target default.target
