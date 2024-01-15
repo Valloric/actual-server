@@ -43,7 +43,6 @@ app.use(
 
 app.use('/sync', syncApp.handlers);
 app.use('/account', accountApp.handlers);
-app.use('/nordigen', goCardlessApp.handlers);
 app.use('/gocardless', goCardlessApp.handlers);
 app.use('/secret', secretApp.handlers);
 
@@ -71,17 +70,6 @@ function parseHTTPSConfig(value) {
 }
 
 export default async function run() {
-  if (!fs.existsSync(config.serverFiles)) {
-    fs.mkdirSync(config.serverFiles);
-  }
-
-  if (!fs.existsSync(config.userFiles)) {
-    fs.mkdirSync(config.userFiles);
-  }
-
-  await accountApp.init();
-  await syncApp.init();
-
   if (config.https) {
     const https = await import('node:https');
     const httpsOptions = {
